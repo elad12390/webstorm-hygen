@@ -1,6 +1,6 @@
-package org.jetbrains.plugins.template.services
+package com.github.elad12390.webstormhygen.services
 
-import org.jetbrains.plugins.template.MyBundle
+import com.github.elad12390.webstormhygen.MyBundle
 
 class MyApplicationService {
 
