@@ -1,18 +1,24 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.elad12390.webstormhygen</id>
-    <name>webstorm-hygen</name>
+    <name>WebstormHygen</name>
     <vendor>elad12390</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.elad12390.webstormhygen.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.elad12390.webstormhygen.services.MyProjectService"/>
+        <applicationService serviceImplementation="com.github.elad12390.webstormhygen.services.ProjectStateService"/>
+        <projectConfigurable
+                parentId="tools"
+                instance="com.github.elad12390.webstormhygen.configurables.HygenSettingsConfigurable"
+                id="com.github.elad12390.webstormhygen.configurables.HygenSettingsConfigurable"
+                displayName="Hygen GUI Settings"
+                nonDefaultProject="true"/>
     </extensions>
 
-    <applicationListeners>
-        <listener class="com.github.elad12390.webstormhygen.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+    <actions>
+        <group id="WebstormHygen.MenuActions" class="com.github.elad12390.webstormhygen.groups.HygenDefaultActionGroup" text="CreateComponentAction" description="Create a component using hygen">
+            <add-to-group group-id="ProjectViewPopupMenuModifyGroup" relative-to-action="$Delete" anchor="before"/>
+        </group>
+    </actions>
 </idea-plugin>
