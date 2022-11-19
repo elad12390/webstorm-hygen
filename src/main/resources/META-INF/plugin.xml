@@ -14,6 +14,7 @@
                 id="com.github.elad12390.webstormhygen.configurables.HygenSettingsConfigurable"
                 displayName="Hygen GUI Settings"
                 nonDefaultProject="true"/>
+        <notificationGroup id="Hygen Generator Group" displayType="BALLOON"/>
     </extensions>
 
     <actions>
