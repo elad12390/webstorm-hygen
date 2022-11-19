@@ -103,7 +103,7 @@ class CreateComponentAction(
                 val argumentDefinition = getArgumentDefinition(argText)
                 if (listOf("path", "directory", "dir").contains(argumentDefinition["NAME"]?.lowercase())) {
                     argumentDefinition["DEFAULT"] =
-                        folderRightClicked.path.substring(ProjectStateService.instance.generateFolderPath.length)
+                        folderRightClicked.path.substring(ProjectStateService.getInstance(project).generateFolderPath.length)
                 }
                 val inputValueOrNull = getInput(
                     project,
