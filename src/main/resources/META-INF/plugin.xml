@@ -17,7 +17,8 @@
     </extensions>
 
     <actions>
-        <group id="WebstormHygen.MenuActions" class="com.github.elad12390.webstormhygen.groups.HygenDefaultActionGroup" text="CreateComponentAction" description="Create a component using hygen">
+        <group id="WebstormHygen">
+            <group id="WebstormHygen.MenuActions" class="com.github.elad12390.webstormhygen.groups.HygenActionGroup" text="All Actions Found in Hygen" popup="true"/>
             <add-to-group group-id="ProjectViewPopupMenuModifyGroup" relative-to-action="$Delete" anchor="before"/>
         </group>
     </actions>
