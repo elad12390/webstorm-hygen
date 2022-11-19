@@ -12,6 +12,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil
 )
 class ProjectStateService : PersistentStateComponent<ProjectStateService> {
     var folderPath: String = ""
+    var generateFolderPath: String = ""
 
     companion object {
         val instance: ProjectStateService

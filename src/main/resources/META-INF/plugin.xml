@@ -19,7 +19,7 @@
     <actions>
         <group id="WebstormHygen">
             <group id="WebstormHygen.MenuActions" class="com.github.elad12390.webstormhygen.groups.HygenActionGroup" text="All Actions Found in Hygen" popup="true"/>
-            <add-to-group group-id="ProjectViewPopupMenuModifyGroup" relative-to-action="$Delete" anchor="before"/>
+            <add-to-group group-id="ProjectViewPopupMenu" relative-to-action="ProjectViewPopupMenuModifyGroup" anchor="before"/>
         </group>
     </actions>
 </idea-plugin>

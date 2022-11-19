@@ -19,13 +19,13 @@ class HygenActionGroup : ActionGroup() {
             return
         }
 
-        val selectedFiles = (e.dataContext.getData("VCS_VIRTUAL_FILES") as? Iterable<VirtualFile>)?.toList()
+        val selectedFiles = e.dataContext.getData(PlatformCoreDataKeys.VIRTUAL_FILE)
         if (selectedFiles == null) {
             e.presentation.isEnabled = false
             return
         }
 
-        if (selectedFiles.isEmpty() || (selectedFiles.size > 1) || !selectedFiles.first().isDirectory) {
+        if (!selectedFiles.path.replace("[\\\\/]".toRegex(), "/").contains(ProjectStateService.instance.generateFolderPath.replace("[\\\\/]".toRegex(), "/"))) {
             e.presentation.isEnabled = false
             return
         }
@@ -61,6 +61,7 @@ class HygenActionGroup : ActionGroup() {
             }
 
             for (action in template.children) {
+                if (!action.isDirectory) continue
                 val actionMapping = actions.getOrDefault(action.name, mutableSetOf())
                 actionMapping.add(template)
                 actions[action.name] = actionMapping

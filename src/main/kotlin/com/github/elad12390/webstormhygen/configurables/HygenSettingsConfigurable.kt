@@ -14,35 +14,56 @@ class HygenSettingsConfigurable : Configurable {
     private val pathTextField
         get() = (settingsPanel?.getComponent(1) as? TextFieldWithBrowseButton)
 
+    private val generateFolderPath
+        get() = (settingsPanel?.getComponent(3) as? TextFieldWithBrowseButton)
+
     override fun getPreferredFocusedComponent(): JComponent? = settingsPanel?.preferredFocusedComponent
 
     override fun createComponent(): JComponent {
         settingsPanel = panel {
             row("Hygen Folder path") {
-                textFieldWithBrowseButton(fileChooserDescriptor = FileChooserDescriptor(false, true, false, false, false, false)) {
-                    it.path
-                }
+                textFieldWithBrowseButton(
+                    fileChooserDescriptor = FileChooserDescriptor(
+                        false,
+                        true,
+                        false,
+                        false,
+                        false,
+                        false
+                    )
+                )
+            }
+            row("Where to generate components? (base directory)") {
+                textFieldWithBrowseButton(
+                    fileChooserDescriptor = FileChooserDescriptor(
+                        false,
+                        true,
+                        false,
+                        false,
+                        false,
+                        false
+                    )
+                )
             }
         }
         return settingsPanel!!
     }
 
-    override fun isModified() = pathTextField?.let {
-        ProjectStateService.instance.folderPath != it.text
-    } ?: false
+    override fun isModified(): Boolean {
+        return pathTextField?.let { ProjectStateService.instance.folderPath != it.text } ?: false ||
+                generateFolderPath?.let { ProjectStateService.instance.generateFolderPath != it.text } ?: false
+    }
 
     override fun apply() {
-        pathTextField?.let {
-            val state = ProjectStateService.instance
-            state.folderPath = it.text
-        }
+        val state = ProjectStateService.instance
+        pathTextField?.let { state.folderPath = it.text }
+        generateFolderPath?.let { state.generateFolderPath = it.text }
     }
 
     override fun reset() {
-        pathTextField?.let {
-            val state = ProjectStateService.instance
-            it.text = state.folderPath
-        }
+        val state = ProjectStateService.instance
+        pathTextField?.let { it.text = state.folderPath }
+        generateFolderPath?.let { it.text = state.generateFolderPath }
     }
 
     override fun disposeUIResources() {

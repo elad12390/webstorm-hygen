@@ -1,5 +1,6 @@
 package com.github.elad12390.webstormhygen.actions
 
+import com.github.elad12390.webstormhygen.services.ProjectStateService
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.util.ExecUtil
 import com.intellij.icons.AllIcons
@@ -26,6 +27,7 @@ class CreateComponentAction(
             if (definitionFile !== null) {
                 calculateArgumentMapping(e.project!!, LoadTextUtil.loadText(definitionFile), folderRightClicked)?.let { argsMapping ->
                     // run generate in cli
+
                     ExecUtil.execAndGetOutput(
                         GeneralCommandLine(
                             *ExecUtil.getTerminalCommand("Hygen Generator", "npx").toTypedArray(),
@@ -47,15 +49,17 @@ class CreateComponentAction(
         val argumentMapping = mutableMapOf<String, String?>()
 
         matches.forEach {
-            val newValue = it.groups["DEFINITION"]?.value?.let { argText ->
+            it.groups["DEFINITION"]?.value?.let { argText ->
                 val argumentDefinition = getArgumentDefinition(argText)
-                if (argumentDefinition["DEFAULT"] === null && listOf("path", "directory").contains(argumentDefinition["NAME"]?.lowercase())) {
-                    argumentDefinition["DEFAULT"] = folderRightClicked.path
+                if (listOf("path", "directory", "dir").contains(argumentDefinition["NAME"]?.lowercase())) {
+                    argumentDefinition["DEFAULT"] = folderRightClicked.path.substring(ProjectStateService.instance.generateFolderPath.length)
                 }
-                argumentMapping[argumentDefinition["NAME"] ?: "unknown"] = getInput(project, argumentDefinition["NAME"], argumentDefinition["TYPE"], argumentDefinition["MESSAGE"], argumentDefinition["DEFAULT"])
+                val inputValueOrNull = getInput(project, argumentDefinition["NAME"], argumentDefinition["TYPE"], argumentDefinition["MESSAGE"], argumentDefinition["DEFAULT"])
+                if (inputValueOrNull === null) return@calculateArgumentMapping null
+
+                argumentMapping[argumentDefinition["NAME"] ?: "unknown"] = inputValueOrNull
             }
 
-            if (newValue === null) return null
         }
 
         return argumentMapping
