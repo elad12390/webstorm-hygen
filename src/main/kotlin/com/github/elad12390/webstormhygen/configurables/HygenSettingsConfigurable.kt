@@ -3,12 +3,14 @@ package com.github.elad12390.webstormhygen.configurables
 import com.github.elad12390.webstormhygen.services.ProjectStateService
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.options.Configurable
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.layout.panel
 import javax.swing.JComponent
+import com.intellij.openapi.project.guessCurrentProject
 
-class HygenSettingsConfigurable : Configurable {
+class HygenSettingsConfigurable(val project: Project) : Configurable {
     private var settingsPanel: DialogPanel? = null
 
     private val pathTextField
@@ -50,18 +52,18 @@ class HygenSettingsConfigurable : Configurable {
     }
 
     override fun isModified(): Boolean {
-        return pathTextField?.let { ProjectStateService.instance.folderPath != it.text } ?: false ||
-                generateFolderPath?.let { ProjectStateService.instance.generateFolderPath != it.text } ?: false
+        return pathTextField?.let { ProjectStateService.getInstance(project).folderPath != it.text } ?: false ||
+                generateFolderPath?.let { ProjectStateService.getInstance(project).generateFolderPath != it.text } ?: false
     }
 
     override fun apply() {
-        val state = ProjectStateService.instance
+        val state = ProjectStateService.getInstance(project)
         pathTextField?.let { state.folderPath = it.text }
         generateFolderPath?.let { state.generateFolderPath = it.text }
     }
 
     override fun reset() {
-        val state = ProjectStateService.instance
+        val state = ProjectStateService.getInstance(project)
         pathTextField?.let { it.text = state.folderPath }
         generateFolderPath?.let { it.text = state.generateFolderPath }
     }

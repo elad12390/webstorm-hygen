@@ -7,7 +7,7 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.elad12390.webstormhygen.services.ProjectStateService"/>
+        <projectService serviceImplementation="com.github.elad12390.webstormhygen.services.ProjectStateService"/>
         <projectConfigurable
                 parentId="tools"
                 instance="com.github.elad12390.webstormhygen.configurables.HygenSettingsConfigurable"

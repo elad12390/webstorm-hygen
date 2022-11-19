@@ -4,6 +4,8 @@ import com.github.elad12390.webstormhygen.actions.CreateComponentAction
 import com.github.elad12390.webstormhygen.services.ProjectStateService
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.actionSystem.*
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.currentOrDefaultProject
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VirtualFile
@@ -11,6 +13,7 @@ import com.intellij.util.containers.map2Array
 import java.io.File
 
 class HygenActionGroup : ActionGroup() {
+
     override fun update(e: AnActionEvent) {
         e.presentation.icon = AllIcons.Actions.AddFile
 
@@ -25,7 +28,7 @@ class HygenActionGroup : ActionGroup() {
             return
         }
 
-        if (!selectedFiles.path.replace("[\\\\/]".toRegex(), "/").contains(ProjectStateService.instance.generateFolderPath.replace("[\\\\/]".toRegex(), "/"))) {
+        if (!selectedFiles.path.replace("[\\\\/]".toRegex(), "/").contains(ProjectStateService.getInstance(currentOrDefaultProject(e.project)).generateFolderPath.replace("[\\\\/]".toRegex(), "/"))) {
             e.presentation.isEnabled = false
             return
         }
@@ -34,7 +37,7 @@ class HygenActionGroup : ActionGroup() {
     }
 
     override fun getChildren(e: AnActionEvent?): Array<AnAction> {
-        return ProjectStateService.instance.folderPath.let {
+        return ProjectStateService.getInstance(currentOrDefaultProject(e?.project)).folderPath.let {
             val folder = VfsUtil.findFile(File(it).toPath(), true)
             folder?.let { folderVirtualFile ->
                 val actions = groupDirectoryByActions(folderVirtualFile)
